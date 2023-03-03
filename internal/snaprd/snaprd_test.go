@@ -12,7 +12,7 @@ var configFile = "../../snaprd.example.yaml"
 func TestNew(t *testing.T) {
 	expected := Snaprd{
 		Config: &config.Config{
-			Schedule: "*/1 * * * *",
+			Schedule: "0 1 * * *",
 			Snapraid: config.Snapraid{
 				Executable:      "snapraid",
 				Config:          "snapraid.conf",
