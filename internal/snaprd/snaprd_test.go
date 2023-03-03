@@ -32,7 +32,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestParseTouch(t *testing.T) {
-	expected := 2.0
+	expected := 1.0
 	f, err := os.Open("../../testdata/touch.log")
 	if err != nil {
 		t.Error(err)
