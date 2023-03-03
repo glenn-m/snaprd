@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var configFile = "../../snaprd.yaml"
+var configFile = "../../snaprd.example.yaml"
 
 func TestParse(t *testing.T) {
 	expected := Config{
