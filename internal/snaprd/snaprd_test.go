@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var configFile = "../../snaprd.yaml"
+var configFile = "../../snaprd.example.yaml"
 
 func TestNew(t *testing.T) {
 	expected := Snaprd{
