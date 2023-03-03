@@ -39,6 +39,7 @@ msg:progress: Verified /var/lib/snapraid/SnapRAID.content in 0 seconds
 msg:progress: Verified /mnt/8tb-irn-w-1/.SnapRAID.content in 0 seconds
 msg:progress: Verified /mnt/4tb-wd-r-1/.SnapRAID.content in 0 seconds
 msg:progress: Verified /mnt/4tb-wd-r-2/.SnapRAID.content in 0 seconds
+touch: /mnt/4tb-wd-r-1/test.txt
 memory:used:569273852
 memory:block:17
 memory:extent:88
