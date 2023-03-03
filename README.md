@@ -1,0 +1,20 @@
+# Snaprd
+
+Daemon that runs [snapraid](https://www.snapraid.it/) on a schedule and surfaces [Prometheus](https://prometheus.io/) metrics.
+
+### Configuration
+
+| Flag          | Env Var             | Description                                         |
+|---------------|---------------------|-----------------------------------------------------|
+| --config      | SNAPRD_CONFIG_FILE  | The path to the snaprd config yaml file.            |
+| --metricsPort | SNAPRD_METRICS_PORT | The port the Prometheus metrics will be exposed on. |
+| --metricsPath | SNAPRD_METRICS_PATH | The path the Prometheus metrics will be exposed on. |
+
+Configuration is done via a YAML file. To see the various options available, check out the [example config file](./snaprd.example.yaml).
+
+### TODO
+
+* Implement Delete Threshold
+  - Abort if snapraid diff detects more than N files deleted, set to -1 to disable
+* Implement diff metrics, how many files added, removed etc.
+* Create example systemd config

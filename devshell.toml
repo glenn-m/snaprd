@@ -1,0 +1,45 @@
+imports = [
+  "language.go"
+]
+
+[devshell]
+# This is the name of your environment. It should usually map to the project
+# name.
+name = "snaprd"
+
+# Message Of The Day (MOTD) is displayed when entering the environment with an
+# interactive shell. By default it will show the project name.
+#
+# motd = ""
+
+# Add packages from nixpkgs here. Use `nix search nixpkgs <term>` to find the
+# package that you need.
+#
+# NOTE: don't forget to put commas between items! :)
+packages = [
+  "snapraid",
+  "gnumake",
+  "gcc",
+  "diffutils", # used by golangci-lint
+  "goreleaser",
+  "mdbook",
+  "mdsh",
+  "webfs",
+  "hyperfine",
+]
+
+# Declare commands that are available in the environment.
+[[commands]]
+package = "nixpkgs-fmt"
+category = "formatters"
+
+[[commands]]
+help = "github utility"
+name = "hub"
+package = "gitAndTools.hub"
+category = "utilites"
+
+[[commands]]
+help = "golang linter"
+package = "golangci-lint"
+category = "linters"

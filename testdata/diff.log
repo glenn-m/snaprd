@@ -1,0 +1,52 @@
+version:12.2
+unixtime:1676824457
+time:2023-02-19 11:34:17
+command:diff
+argv:0:snapraid
+argv:1:-c
+argv:2:snapraid.conf
+argv:3:-l
+argv:4:testdata/diff.log
+argv:5:diff
+conf:file:snapraid.conf
+uuid:by-uuid:8:17:3980a994-07cf-40de-b0b6-595f4a7c1c9e: found ../../sdb1
+uuid:by-uuid:8:49:24d77e29-119a-4e0e-901d-a05455c4b170: found ../../sdd1
+uuid:by-uuid:8:33:d83b8dd5-f0a7-4ba2-8f08-fb600f3b02d4: found ../../sdc1
+blocksize:262144
+data:d1:/mnt/8tb-irn-w-1/
+data:d2:/mnt/4tb-wd-r-1/
+data:d3:/mnt/4tb-wd-r-2/
+mode:par1
+parity:0:/mnt/10tb-wd-r-p/SnapRAID.parity
+filter:exclude /downloads/
+content:/var/lib/snapraid/SnapRAID.content
+msg:progress: Loading state from /var/lib/snapraid/SnapRAID.content...
+msg:verbose:     4653 files
+msg:verbose:        0 hardlinks
+msg:verbose:        0 symlinks
+msg:verbose:      127 empty dirs
+msg:progress: Comparing...
+statfs:xfs: /mnt/4tb-wd-r-1/ 
+statfs:xfs: /mnt/8tb-irn-w-1/ 
+statfs:xfs: /mnt/4tb-wd-r-2/ 
+msg:verbose: Excluding content '/mnt/8tb-irn-w-1/.SnapRAID.content'
+msg:verbose: Excluding content '/mnt/4tb-wd-r-1/.SnapRAID.content'
+msg:verbose: Excluding content '/mnt/4tb-wd-r-2/.SnapRAID.content'
+msg:verbose: Excluding directory '/mnt/4tb-wd-r-1/downloads' for rule 'exclude /downloads/'
+msg:status:
+msg:status:     4496 equal
+msg:status:      471 added
+msg:status:      157 removed
+msg:status:        0 updated
+msg:status:        0 moved
+msg:status:        0 copied
+msg:status:        0 restored
+summary:equal:4496
+summary:added:471
+summary:removed:157
+summary:updated:0
+summary:moved:0
+summary:copied:0
+summary:restored:0
+msg:status: There are differences!
+summary:exit:diff

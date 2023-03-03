@@ -1,0 +1,19 @@
+---
+# Uses cron format, will skip run if previous run hasn't finished
+schedule: "0 1 * * *"
+snapraid:
+  # Path to the snapraid executable
+  executable: "snapraid"
+  # Path to the snapraid configuration
+  config: "snapraid.conf"
+  # Abort if snapraid diff detects more than N files deleted, set -1 to disable
+  deleteThreshold: 40
+  # Enable touch
+  touch: true
+scrub:
+  # Enable scrub after sync
+  enabled: false
+  # What percentage of the array to scrub
+  percentage: 12
+  # Only scrub data older than N days
+  olderThan: 10
