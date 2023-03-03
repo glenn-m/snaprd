@@ -1,5 +1,7 @@
 # Snaprd
 
+[![Go](https://github.com/glenn-m/snaprd/actions/workflows/go.yml/badge.svg)](https://github.com/glenn-m/snaprd/actions/workflows/go.yml)
+
 Daemon that runs [snapraid](https://www.snapraid.it/) on a schedule and surfaces [Prometheus](https://prometheus.io/) metrics.
 
 ### Configuration
