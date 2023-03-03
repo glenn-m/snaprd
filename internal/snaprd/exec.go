@@ -6,12 +6,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// ExecCmd runs a snapraid command and returns the logfile location and an error
 func (s *Snaprd) ExecCmd(command string, args ...string) (*os.File, error) {
 	logFile, err := os.CreateTemp("/tmp", "snaprd")
 	if err != nil {
 		return nil, err
 	}
+
 	logFiles = append(logFiles, logFile.Name())
+
 	cmdString := []string{
 		command,
 		"--conf",
@@ -31,11 +34,13 @@ func (s *Snaprd) ExecCmd(command string, args ...string) (*os.File, error) {
 				if exitError.ExitCode() == 2 {
 					return logFile, nil
 				}
+
 				return nil, err
 			}
 		} else {
 			return nil, err
 		}
 	}
+	
 	return logFile, nil
 }
