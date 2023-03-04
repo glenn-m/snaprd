@@ -2,13 +2,14 @@ package snaprd
 
 import (
 	"os"
+	"strconv"
+	"time"
+
 	"github.com/glenn-m/snaprd/internal/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
-	"strconv"
-	"time"
 )
 
 var (
@@ -28,13 +29,15 @@ var (
 		Name: "snaprd_touched_file_count",
 		Help: "The number of touched files in the current run",
 	})
-	logFiles []string
 )
 
+// Snaprd contains the configuration for snaprd
 type Snaprd struct {
-	Config *config.Config
+	Config   *config.Config
+	LogFiles []string
 }
 
+// New creates a new instance of Snaprd
 func New(configFile string) (*Snaprd, error) {
 	config, err := config.Parse(configFile)
 	if err != nil {
@@ -47,9 +50,9 @@ func New(configFile string) (*Snaprd, error) {
 	return &snaprd, nil
 }
 
-func cleanup() {
+func (s *Snaprd) cleanup() {
 	log.Info("Running cleanup...")
-	for _, file := range logFiles {
+	for _, file := range s.LogFiles {
 		log.Info(file)
 		if err := os.Remove(file); err != nil {
 			log.WithError(err).Info("error whilst running cleanup")
@@ -57,6 +60,7 @@ func cleanup() {
 	}
 }
 
+// Run starts the cron schedule
 func (s *Snaprd) Run() {
 	// Setup Cron scheduler
 	c := cron.New(cron.WithChain(
@@ -65,7 +69,7 @@ func (s *Snaprd) Run() {
 
 	c.AddFunc(s.Config.Schedule, func() {
 		log.Info("Running scheduled snapraid")
-		defer cleanup()
+		defer s.cleanup()
 		st := time.Now()
 
 		if s.Config.Snapraid.Touch {
@@ -88,7 +92,6 @@ func (s *Snaprd) Run() {
 			log.WithFields(log.Fields{"number": numTouched}).Info("Files touched...")
 		}
 
-
 		log.Info("Running diff...")
 		diffOut, err := s.ExecCmd("diff")
 		if err != nil {
@@ -96,7 +99,6 @@ func (s *Snaprd) Run() {
 			runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
 			return
 		}
-
 
 		log.Info("Checking if sync required...")
 		syncRequired, err := s.ParseDiff(diffOut)
@@ -116,7 +118,6 @@ func (s *Snaprd) Run() {
 			}
 		}
 
-
 		if s.Config.Scrub.Enabled {
 			log.Info("Running scrub...")
 			_, err := s.ExecCmd(
@@ -132,7 +133,6 @@ func (s *Snaprd) Run() {
 				return
 			}
 		}
-
 
 		et := time.Since(st).Seconds()
 		runTime.Set(et)

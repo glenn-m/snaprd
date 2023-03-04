@@ -1,0 +1,30 @@
+run:
+  tests: true
+  modules-download-mode: mod
+  skip-dirs:
+  - vendor
+  - pkg/proto
+linters:
+  disable-all: true
+  enable:
+  - errcheck
+  - goconst
+  - gofumpt
+  - goimports
+  - revive
+  - gosimple
+  - govet
+  - ineffassign
+  - nakedret
+  - staticcheck
+  - unused
+  - whitespace
+linters-settings:
+  govet:
+    check-shadowing: true
+issues:
+  exclude-use-default: false
+  exclude:
+  - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+  - 'shadow: declaration of "err" shadows declaration at line (\d+)'
+  - 'SA1019: package github.com/golang/protobuf/proto is deprecated'

@@ -20,6 +20,8 @@ packages = [
   "snapraid",
   "gnumake",
   "gcc",
+  "gofumpt",
+  "gotools",
   "diffutils", # used by golangci-lint
   "goreleaser",
   "mdbook",

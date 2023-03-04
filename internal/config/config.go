@@ -8,12 +8,14 @@ import (
 
 var k = koanf.New(".")
 
+// Config contains the main snaprd config
 type Config struct {
 	Schedule string   `koanf:"schedule"`
 	Snapraid Snapraid `koanf:"snapraid"`
 	Scrub    Scrub    `koanf:"scrub"`
 }
 
+// Snapraid contains the snapraid specific config
 type Snapraid struct {
 	Executable      string `koanf:"executable"`
 	Config          string `koanf:"config"`
@@ -21,13 +23,14 @@ type Snapraid struct {
 	Touch           bool   `koanf:"touch"`
 }
 
+// Scrub contains the snapraid scrub specific config
 type Scrub struct {
 	Enabled    bool `koanf:"enabled"`
 	Percentage int  `koanf:"percentage"`
 	OlderThan  int  `koanf:"olderThan"`
 }
 
-// Load configuration file and unmarshal to struct
+// Parse loads configuration file and unmarshal's to struct
 func Parse(configFile string) (*Config, error) {
 	err := k.Load(file.Provider(configFile), yaml.Parser())
 	if err != nil {

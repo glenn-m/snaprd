@@ -1,12 +1,12 @@
 package snaprd
 
 import (
-	"os"
 	"bufio"
+	"os"
 	"strings"
 )
 
-// Parse the Touch cmd logfile output
+// ParseTouch parses the Touch cmd logfile output
 func (s *Snaprd) ParseTouch(f *os.File) (float64, error) {
 	scanner := bufio.NewScanner(f)
 	numTouched := 0.0
@@ -21,7 +21,7 @@ func (s *Snaprd) ParseTouch(f *os.File) (float64, error) {
 	return numTouched, nil
 }
 
-// Parse the Diff cmd logfile output
+// ParseDiff parses the Diff cmd logfile output
 func (s *Snaprd) ParseDiff(f *os.File) (bool, error) {
 	scanner := bufio.NewScanner(f)
 	var syncRequired bool
