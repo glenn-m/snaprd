@@ -101,14 +101,23 @@ func (s *Snaprd) Run() {
 		}
 
 		log.Info("Checking if sync required...")
-		syncRequired, err := s.ParseDiff(diffOut)
+		diff, err := s.ParseDiff(diffOut)
 		if err != nil {
 			log.WithError(err).Error("error whilst parsing touch logfile output...")
 			runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
 			return
 		}
 
-		if syncRequired {
+		log.Info("Checking if diff exceeds delete threshold...")
+		if diff.Removed >= float64(s.Config.Snapraid.DeleteThreshold) {
+			log.WithFields(
+				log.Fields{"removed": diff.Removed},
+			).Error("aborting snapraid run, removed files would exceed delete threshold")
+			runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
+			return
+		}
+
+		if diff.SyncRequired {
 			log.Info("Running sync...")
 			_, err := s.ExecCmd("sync")
 			if err != nil {
