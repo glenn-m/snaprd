@@ -82,8 +82,8 @@ func (s *Snaprd) ParseDiff(f *os.File) (*Diff, error) {
 				diff.Copied = metricVal
 				diffStatus.With(prometheus.Labels{"action": "copied"}).Set(metricVal)
 			case "restored":
-				diffStatus.With(prometheus.Labels{"action": "restored"}).Set(metricVal)
 				diff.Restored = metricVal
+				diffStatus.With(prometheus.Labels{"action": "restored"}).Set(metricVal)
 			}
 		}
 	}
