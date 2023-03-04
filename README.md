@@ -16,7 +16,4 @@ Configuration is done via a YAML file. To see the various options available, che
 
 ### TODO
 
-* Implement Delete Threshold
-  - Abort if snapraid diff detects more than N files deleted, set to -1 to disable
-* Implement diff metrics, how many files added, removed etc.
 * Create example systemd config

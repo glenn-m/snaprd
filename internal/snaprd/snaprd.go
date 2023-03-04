@@ -108,13 +108,15 @@ func (s *Snaprd) Run() {
 			return
 		}
 
-		log.Info("Checking if diff exceeds delete threshold...")
-		if diff.Removed >= float64(s.Config.Snapraid.DeleteThreshold) {
-			log.WithFields(
-				log.Fields{"removed": diff.Removed},
-			).Error("aborting snapraid run, removed files would exceed delete threshold")
-			runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
-			return
+		if s.Config.Snapraid.DeleteThreshold > -1 {
+			log.Info("Checking if diff exceeds delete threshold...")
+			if diff.Removed >= float64(s.Config.Snapraid.DeleteThreshold) {
+				log.WithFields(
+					log.Fields{"removed": diff.Removed},
+				).Error("aborting snapraid run, removed files would exceed delete threshold")
+				runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
+				return
+			}
 		}
 
 		if diff.SyncRequired {
