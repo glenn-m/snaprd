@@ -67,7 +67,7 @@ func (s *Snaprd) Run() {
 		cron.SkipIfStillRunning(cron.DefaultLogger),
 	))
 
-	c.AddFunc(s.Config.Schedule, func() {
+	_, err := c.AddFunc(s.Config.Schedule, func() {
 		log.Info("Running scheduled snapraid")
 		defer s.cleanup()
 		st := time.Now()
@@ -139,6 +139,9 @@ func (s *Snaprd) Run() {
 		numberRuns.Inc()
 		log.WithFields(log.Fields{"Duration": et}).Info("Run complete")
 	})
+	if err != nil {
+		log.WithError(err).Error("error starting cron schedule")
+	}
 
 	c.Start()
 }
