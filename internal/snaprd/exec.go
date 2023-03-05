@@ -3,6 +3,7 @@ package snaprd
 import (
 	"os"
 	"os/exec"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -12,9 +13,7 @@ func (s *Snaprd) ExecCmd(command string, args ...string) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	logFiles = append(logFiles, logFile.Name())
-
+	s.LogFiles = append(s.LogFiles, logFile.Name())
 	cmdString := []string{
 		command,
 		"--conf",

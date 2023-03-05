@@ -1,6 +1,5 @@
 package snaprd
 
-// sort all this - add golangci or something
 import (
 	"os"
 	"strconv"
@@ -30,15 +29,15 @@ var (
 		Name: "snaprd_touched_file_count",
 		Help: "The number of touched files in the current run",
 	})
-
-	// put this in the Snaprd struct. Avoiding globals vars is always a good call
-	logFiles []string
 )
 
+// Snaprd contains the configuration for snaprd
 type Snaprd struct {
-	Config *config.Config
+	Config   *config.Config
+	LogFiles []string
 }
 
+// New creates a new instance of Snaprd
 func New(configFile string) (*Snaprd, error) {
 	config, err := config.Parse(configFile)
 	if err != nil {
@@ -51,30 +50,28 @@ func New(configFile string) (*Snaprd, error) {
 	return &snaprd, nil
 }
 
-// make this a method on Snaprd
-func cleanup() {
+func (s *Snaprd) cleanup() {
 	log.Info("Running cleanup...")
-	for _, file := range logFiles {
-		// make this a better log call
+	for _, file := range s.LogFiles {
 		log.Info(file)
 		if err := os.Remove(file); err != nil {
 			log.WithError(err).Info("error whilst running cleanup")
 		}
 	}
 
-	// should probably reset the logFiles to an empty slice here
+  s.LogFiles = []string{}
 }
 
+// Run starts the cron schedule
 func (s *Snaprd) Run() {
 	// Setup Cron scheduler
 	c := cron.New(cron.WithChain(
 		cron.SkipIfStillRunning(cron.DefaultLogger),
 	))
 
-	// you could start by breaking this out into a `cronRun` method
-	c.AddFunc(s.Config.Schedule, func() {
+	_, err := c.AddFunc(s.Config.Schedule, func() {
 		log.Info("Running scheduled snapraid")
-		defer cleanup()
+		defer s.cleanup()
 		st := time.Now()
 
 		if s.Config.Snapraid.Touch {
@@ -94,7 +91,7 @@ func (s *Snaprd) Run() {
 				return
 			}
 
-			touchedFiles.Set(float64(numTouched))
+			touchedFiles.Set(numTouched)
 			log.WithFields(log.Fields{"number": numTouched}).Info("Files touched...")
 		}
 
@@ -104,15 +101,26 @@ func (s *Snaprd) Run() {
 		}
 
 		log.Info("Checking if sync required...")
-		// there might be a way to parse as a method, but that might not be worth it.
-		syncRequired, err := s.ParseDiff(diffOut)
+		diff, err := s.ParseDiff(diffOut)
 		if err != nil {
 			log.WithError(err).Error("error whilst parsing touch logfile output...")
 			runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
 			return
 		}
 
-		if syncRequired {
+		if s.Config.Snapraid.DeleteThreshold > -1 {
+			log.Info("Checking if diff exceeds delete threshold...")
+			if diff.Removed >= float64(s.Config.Snapraid.DeleteThreshold) {
+				log.WithFields(
+					log.Fields{"removed": diff.Removed},
+				).Error("aborting snapraid run, removed files would exceed delete threshold")
+				runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
+				return
+			}
+		}
+
+		if diff.SyncRequired {
+			log.Info("Running sync...")
 			_, err := s.runCmd("sync")
 			if err != nil {
 				return
@@ -137,13 +145,14 @@ func (s *Snaprd) Run() {
 		numberRuns.Inc()
 		log.WithFields(log.Fields{"Duration": et}).Info("Run complete")
 	})
+	if err != nil {
+		log.WithError(err).Error("error starting cron schedule")
+	}
 
 	c.Start()
 }
 
 // runCmd wraps ExecCmd to wrap logging and metrics
-// you could also make methods to run each command and return the appropriate output, but this will clean
-// it up a good bit
 func (s *Snaprd) runCmd(cmd string, args ...string) (*os.File, error) {
 	log.Infof("Running %s...", cmd)
 

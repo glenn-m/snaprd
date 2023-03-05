@@ -1,15 +1,16 @@
 package config
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-var configFile = "../../snaprd.yaml"
+var configFile = "../../snaprd.example.yaml"
 
 func TestParse(t *testing.T) {
 	expected := Config{
-		Schedule: "*/1 * * * *",
+		Schedule: "0 1 * * *",
 		Snapraid: Snapraid{
 			Executable:      "snapraid",
 			Config:          "snapraid.conf",

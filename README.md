@@ -1,5 +1,7 @@
 # Snaprd
 
+[![Go](https://github.com/glenn-m/snaprd/actions/workflows/go.yml/badge.svg)](https://github.com/glenn-m/snaprd/actions/workflows/go.yml)
+
 Daemon that runs [snapraid](https://www.snapraid.it/) on a schedule and surfaces [Prometheus](https://prometheus.io/) metrics.
 
 ### Configuration
@@ -14,7 +16,4 @@ Configuration is done via a YAML file. To see the various options available, che
 
 ### TODO
 
-* Implement Delete Threshold
-  - Abort if snapraid diff detects more than N files deleted, set to -1 to disable
-* Implement diff metrics, how many files added, removed etc.
 * Create example systemd config
