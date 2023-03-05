@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "glenn-m";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yoio22D8k4rO8lRLoGSJGl8raMVO9fOGHFobAZngcxw=";
+    sha256 = "sha256-1hbkcbj769fmq1vzgb2588jb8dqzzlss7yldwn18jq0n47ah5y5a";
   };
 
-  vendorSha256 = "sha256-RSAT9VtsdXvWDhIZlOjwCF9nhONPXCSEaxVlgW14IKA=";
+  vendorSha256 = lib.fakeHash;
 
   meta = with lib; {
     description =
