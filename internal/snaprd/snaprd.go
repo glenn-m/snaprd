@@ -17,6 +17,10 @@ var (
 		Name: "snaprd_run_failures",
 		Help: "The number of failed snaprd runs",
 	}, []string{"command"})
+	parseFailures = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "snaprd_parse_failures",
+		Help: "The number of failed log file parses",
+	}, []string{"command"})
 	runTime = promauto.NewGauge(prometheus.GaugeOpts{
 		Name: "snaprd_job_duration_seconds",
 		Help: "The time taken to run a snaprd job",
@@ -83,11 +87,7 @@ func (s *Snaprd) Run() {
 			numTouched, err := s.ParseTouch(touchOut)
 			if err != nil {
 				log.WithError(err).Error("error whilst parsing touch logfile output")
-				// do you want to increment this as a runfailure again? maybe make a parseFailures metric
-				// and use that instead
-				// you could also move the logging and metrics to the parse methods directly to clean up the
-				// logic in thi func.
-				runFailures.With(prometheus.Labels{"command": "touch"}).Inc()
+				parseFailures.With(prometheus.Labels{"command": "touch"}).Inc()
 				return
 			}
 
@@ -104,7 +104,7 @@ func (s *Snaprd) Run() {
 		diff, err := s.ParseDiff(diffOut)
 		if err != nil {
 			log.WithError(err).Error("error whilst parsing touch logfile output...")
-			runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
+			parseFailures.With(prometheus.Labels{"command": "touch"}).Inc()
 			return
 		}
 
