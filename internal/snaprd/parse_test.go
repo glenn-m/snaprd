@@ -24,7 +24,16 @@ func TestParseTouch(t *testing.T) {
 
 // TODO: Expand unit test to test metric values parsed from file
 func TestParseDiff(t *testing.T) {
-	expected := true
+	expected := &Diff{
+		SyncRequired: true,
+		Equal:        4496,
+		Added:        471,
+		Removed:      157,
+		Updated:      0,
+		Moved:        0,
+		Copied:       0,
+		Restored:     0,
+	}
 	f, err := os.Open("../../testdata/diff.log")
 	if err != nil {
 		t.Error(err)
@@ -35,5 +44,5 @@ func TestParseDiff(t *testing.T) {
 	}
 	actual, err := s.ParseDiff(f)
 	assert.Nil(t, err)
-	assert.Equal(t, expected, actual.SyncRequired, "They should be equal")
+	assert.Equal(t, expected, actual, "They should be equal")
 }
