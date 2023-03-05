@@ -59,7 +59,7 @@ func (s *Snaprd) cleanup() {
 		}
 	}
 
-  s.LogFiles = []string{}
+	s.LogFiles = []string{}
 }
 
 // Run starts the cron schedule

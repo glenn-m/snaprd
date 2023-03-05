@@ -40,6 +40,6 @@ func (s *Snaprd) ExecCmd(command string, args ...string) (*os.File, error) {
 			return nil, err
 		}
 	}
-	
+
 	return logFile, nil
 }

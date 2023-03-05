@@ -93,6 +93,6 @@ func (s *Snaprd) ParseDiff(f *os.File) (*Diff, error) {
 	if err := scanner.Err(); err != nil {
 		return nil, err
 	}
-  
+
 	return &diff, nil
 }
