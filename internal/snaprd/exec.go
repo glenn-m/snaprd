@@ -33,11 +33,13 @@ func (s *Snaprd) ExecCmd(command string, args ...string) (*os.File, error) {
 				if exitError.ExitCode() == 2 {
 					return logFile, nil
 				}
+
 				return nil, err
 			}
 		} else {
 			return nil, err
 		}
 	}
+	
 	return logFile, nil
 }

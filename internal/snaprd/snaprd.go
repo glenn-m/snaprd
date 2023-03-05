@@ -58,6 +58,8 @@ func (s *Snaprd) cleanup() {
 			log.WithError(err).Info("error whilst running cleanup")
 		}
 	}
+
+  s.LogFiles = []string{}
 }
 
 // Run starts the cron schedule
@@ -73,17 +75,18 @@ func (s *Snaprd) Run() {
 		st := time.Now()
 
 		if s.Config.Snapraid.Touch {
-			log.Info("Running touch...")
-			touchOut, err := s.ExecCmd("touch")
+			touchOut, err := s.runCmd("touch")
 			if err != nil {
-				log.WithError(err).Error("error whilst running snapraid touch")
-				runFailures.With(prometheus.Labels{"command": "touch"}).Inc()
 				return
 			}
 
 			numTouched, err := s.ParseTouch(touchOut)
 			if err != nil {
 				log.WithError(err).Error("error whilst parsing touch logfile output")
+				// do you want to increment this as a runfailure again? maybe make a parseFailures metric
+				// and use that instead
+				// you could also move the logging and metrics to the parse methods directly to clean up the
+				// logic in thi func.
 				runFailures.With(prometheus.Labels{"command": "touch"}).Inc()
 				return
 			}
@@ -92,11 +95,8 @@ func (s *Snaprd) Run() {
 			log.WithFields(log.Fields{"number": numTouched}).Info("Files touched...")
 		}
 
-		log.Info("Running diff...")
-		diffOut, err := s.ExecCmd("diff")
+		diffOut, err := s.runCmd("diff")
 		if err != nil {
-			log.WithError(err).Error("error whilst running snapraid diff...")
-			runFailures.With(prometheus.Labels{"command": "diff"}).Inc()
 			return
 		}
 
@@ -121,17 +121,14 @@ func (s *Snaprd) Run() {
 
 		if diff.SyncRequired {
 			log.Info("Running sync...")
-			_, err := s.ExecCmd("sync")
+			_, err := s.runCmd("sync")
 			if err != nil {
-				log.WithError(err).Error("error whilst running snapraid sync...")
-				runFailures.With(prometheus.Labels{"command": "sync"}).Inc()
 				return
 			}
 		}
 
 		if s.Config.Scrub.Enabled {
-			log.Info("Running scrub...")
-			_, err := s.ExecCmd(
+			_, err := s.runCmd(
 				"scrub",
 				"-p",
 				strconv.Itoa(s.Config.Scrub.Percentage),
@@ -139,8 +136,6 @@ func (s *Snaprd) Run() {
 				strconv.Itoa(s.Config.Scrub.OlderThan),
 			)
 			if err != nil {
-				log.WithError(err).Error("error whilst running snapraid scrub...")
-				runFailures.With(prometheus.Labels{"command": "scrub"}).Inc()
 				return
 			}
 		}
@@ -155,4 +150,17 @@ func (s *Snaprd) Run() {
 	}
 
 	c.Start()
+}
+
+// runCmd wraps ExecCmd to wrap logging and metrics
+func (s *Snaprd) runCmd(cmd string, args ...string) (*os.File, error) {
+	log.Infof("Running %s...", cmd)
+
+	out, err := s.ExecCmd(cmd, args...)
+	if err != nil {
+		log.WithError(err).Errorf("error whilst running snapraid %s", cmd)
+		runFailures.With(prometheus.Labels{"command": cmd}).Inc()
+	}
+
+	return out, err
 }

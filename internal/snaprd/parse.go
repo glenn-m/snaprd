@@ -36,9 +36,11 @@ func (s *Snaprd) ParseTouch(f *os.File) (float64, error) {
 			numTouched++
 		}
 	}
+
 	if err := scanner.Err(); err != nil {
 		return 0.0, err
 	}
+
 	return numTouched, nil
 }
 
@@ -91,6 +93,6 @@ func (s *Snaprd) ParseDiff(f *os.File) (*Diff, error) {
 	if err := scanner.Err(); err != nil {
 		return nil, err
 	}
-
+  
 	return &diff, nil
 }
