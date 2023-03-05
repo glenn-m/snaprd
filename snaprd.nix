@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "snaprd";
-  version = "0.10.0";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "glenn-m";
