@@ -5,7 +5,7 @@ snapraid:
   # Path to the snapraid executable
   executable: "snapraid"
   # Path to the snapraid configuration
-  config: "snapraid.conf"
+  configPath: "snapraid.conf"
   # Abort if snapraid diff detects more than N files deleted, set -1 to disable
   deleteThreshold: 40
   # Enable touch

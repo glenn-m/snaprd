@@ -18,7 +18,7 @@ type Config struct {
 // Snapraid contains the snapraid specific config
 type Snapraid struct {
 	Executable      string `koanf:"executable"`
-	Config          string `koanf:"config"`
+	ConfigPath      string `koanf:"configPath"`
 	DeleteThreshold int    `koanf:"deleteThreshold"`
 	Touch           bool   `koanf:"touch"`
 }

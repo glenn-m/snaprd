@@ -17,7 +17,7 @@ func (s *Snaprd) ExecCmd(command string, args ...string) (*os.File, error) {
 	cmdString := []string{
 		command,
 		"--conf",
-		s.Config.Snapraid.Config,
+		s.Config.Snapraid.ConfigPath,
 		"-l",
 		logFile.Name(),
 	}
