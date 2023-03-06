@@ -15,7 +15,7 @@ func TestNew(t *testing.T) {
 			Schedule: "0 1 * * *",
 			Snapraid: config.Snapraid{
 				Executable:      "snapraid",
-				Config:          "snapraid.conf",
+				ConfigPath:      "snapraid.conf",
 				DeleteThreshold: 40,
 				Touch:           true,
 			},
