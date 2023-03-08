@@ -14,6 +14,4 @@ Daemon that runs [snapraid](https://www.snapraid.it/) on a schedule and surfaces
 
 Configuration is done via a YAML file. To see the various options available, check out the [example config file](./snaprd.example.yaml).
 
-### TODO
-
-* Create example systemd config
+Additionally, a sample systemd service file is [provided](./snaprd.service).
