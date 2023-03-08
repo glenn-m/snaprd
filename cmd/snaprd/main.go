@@ -15,7 +15,7 @@ var (
 	configFile = kingpin.Flag("config",
 		"The path to the snaprd configuration file.").Short('c').Default("snaprd.yaml").Envar("SNAPRD_CONFIG_FILE").String()
 	metricsPort = kingpin.Flag("metricsPort",
-		"The port the Prometheus metrics will be exposed on.").Short('p').Default(":8080").Envar("SNAPRD_METRICS_PORT").String()
+		"The port the Prometheus metrics will be exposed on.").Short('p').Default("8080").Envar("SNAPRD_METRICS_PORT").String()
 	metricsPath = kingpin.Flag("metricsPath",
 		"The path the Prometheus metrics will be exposed on.").Short('m').Default("/metrics").Envar("SNARPD_METRICS_PATH").String()
 )
@@ -46,7 +46,7 @@ func main() {
 
 	// Setup listener for metrics
 	log.Info("snaprd listening on " + *metricsPort)
-	if err := http.ListenAndServe(*metricsPort, nil); err != nil {
+	if err := http.ListenAndServe(":" + *metricsPort, nil); err != nil {
 		log.WithError(err).Fatal("failed to listen on " + *metricsPort)
 	}
 }

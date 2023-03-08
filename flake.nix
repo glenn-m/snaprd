@@ -60,7 +60,7 @@
 
                 port = mkOption {
                   type = types.int;
-                  default = 3000;
+                  default = 9086;
                   description = lib.mdDoc ''
                     Port the Prometheus metrics will be exposed on.
                   '';
@@ -88,11 +88,13 @@
                 description = "snaprd daemon";
                 wantedBy = [ "multi-user.target" ];
                 after = [ "network.target" ];
+                environment = {
+                  SNAPRD_CONFIG_FILE = "${mkConfigFile}";
+                  SNAPRD_METRICS_PORT = "${toString cfg.port}";
+                  SNAPRD_METRICS_PATH = "${cfg.metricsPath}";
+                };
                 serviceConfig = {
-                  ExecStart = "${cfg.package}/bin/snaprd"
-                    + " --configFile=${mkConfigFile}"
-                    + " --metricsPort=${toString cfg.port}"
-                    + " --metricsPath=${cfg.metricsPath}";
+                  ExecStart = "${cfg.package}/bin/snaprd";
                   Restart = "always";
                   WorkDirectory = "/tmp";
                 };
