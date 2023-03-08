@@ -22,7 +22,7 @@
               owner = "glenn-m";
               repo = pname;
               rev = "v${version}";
-              sha256 = "sha256-ygmsRLw2BMIX7u7Wgfhrq1aVYntVsNhQkFnFkEd0dDM=";
+              sha256 = "sha256-yL7HsolXEXwO/WaXHDCyWA7e965iznkr50F512qwVyw=";
             };
 
             vendorSha256 =
