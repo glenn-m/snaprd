@@ -16,13 +16,13 @@
         packages.snaprd = with pkgs;
           buildGoModule rec {
             pname = "snaprd";
-            version = "0.1.0";
+            version = "0.2.0";
 
             src = fetchFromGitHub {
               owner = "glenn-m";
               repo = pname;
               rev = "v${version}";
-              sha256 = "sha256-qvgC1SEWYImC5Y36ozX9Hze0JEJFrPd3wNUlc+Ric8E=";
+              sha256 = "sha256-ygmsRLw2BMIX7u7Wgfhrq1aVYntVsNhQkFnFkEd0dDM=";
             };
 
             vendorSha256 =
