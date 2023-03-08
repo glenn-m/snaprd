@@ -3,7 +3,7 @@ BINARY_NAME=snaprd
 all: fmt vet test build
 
 build:
-	@CGO_ENABLED=0 go build -o "bin/$(BINARY_NAME)" cmd/main.go
+	@CGO_ENABLED=0 go build -o "bin/$(BINARY_NAME)" cmd/${BINARY_NAME}/main.go
 
 run: build
 	@./bin/${BINARY_NAME}

@@ -3,3 +3,4 @@ snapraid.conf
 snaprd.yaml
 .envrc
 .direnv/
+result/
