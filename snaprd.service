@@ -3,7 +3,6 @@ Description=snaprd daemon
 After=network.target
 
 [Service]
-[Service]
 Environment="SNAPRD_METRICS_PATH=/metrics"
 Environment="SNAPRD_METRICS_PORT=9086"
 Environment="SNAPRD_CONFIG_FILE=/some/path/snarpd.yaml"
