@@ -16,7 +16,7 @@
         packages.snaprd = with pkgs;
           buildGoModule rec {
             pname = "snaprd";
-            version = "0.2.1";
+            version = "0.2.2";
 
             src = fetchFromGitHub {
               owner = "glenn-m";
@@ -44,6 +44,8 @@
             cfg = config.services.snaprd;
             mkConfigFile =
               pkgs.writeText "snaprd.yml" (builtins.toJSON cfg.configuration);
+            mkSnapraidConfigFile =
+              pkgs.writeText "snapraid.conf" cfg.snapraidConfig;
           in {
             options = {
               services.snaprd = {
@@ -81,6 +83,14 @@
                     Snaprd configuration as nix attribute set.
                   '';
                 };
+
+                snapraidConfig = mkOption {
+                  type = types.lines;
+                  default = "";
+                  description = lib.mdDoc ''
+                    Contents of the snapraid configuration file
+                  '';
+                };
               };
             };
             config = lib.mkIf cfg.enable {
@@ -92,11 +102,12 @@
                   SNAPRD_CONFIG_FILE = "${mkConfigFile}";
                   SNAPRD_METRICS_PORT = "${toString cfg.port}";
                   SNAPRD_METRICS_PATH = "${cfg.metricsPath}";
+                  SNAPRD_SNAPRAID_CONFIG =
+                    lib.mkIf (cfg.snapraidConfig != "") mkSnapraidConfigFile;
                 };
                 serviceConfig = {
                   ExecStart = "${cfg.package}/bin/snaprd";
                   Restart = "always";
-                  WorkDirectory = "/tmp";
                 };
               };
             };

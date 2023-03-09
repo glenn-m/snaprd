@@ -46,7 +46,7 @@ func main() {
 
 	// Setup listener for metrics
 	log.Info("snaprd listening on " + *metricsPort)
-	if err := http.ListenAndServe(":" + *metricsPort, nil); err != nil {
+	if err := http.ListenAndServe(":"+*metricsPort, nil); err != nil {
 		log.WithError(err).Fatal("failed to listen on " + *metricsPort)
 	}
 }

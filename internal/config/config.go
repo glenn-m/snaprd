@@ -1,8 +1,11 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
+	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
 )
 
@@ -36,9 +39,19 @@ func Parse(configFile string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	err = k.Load(env.Provider("SNAPRD_", ".", func(s string) string {
+		return strings.Replace(strings.ToLower(
+			strings.TrimPrefix(s, "SNAPRD_")), "_", ".", -1)
+	}), nil)
+	if err != nil {
+		return nil, err
+	}
+
 	var conf Config
 	if err := k.Unmarshal("", &conf); err != nil {
 		return nil, err
 	}
+
 	return &conf, nil
 }
