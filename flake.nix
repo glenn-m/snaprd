@@ -26,7 +26,7 @@
             };
 
             vendorSha256 =
-              "sha256-TohfQOr3OMV3C4FmmEkuzO8kMCvkRqhFGcYbhJfh/9c=";
+              "sha256-cyMLyihBQF1sILnUsfBRcDm2XABw8PwY6W+nC/jqGuo=";
 
             meta = with lib; {
               description =
@@ -102,7 +102,7 @@
                   SNAPRD_CONFIG_FILE = "${mkConfigFile}";
                   SNAPRD_METRICS_PORT = "${toString cfg.port}";
                   SNAPRD_METRICS_PATH = "${cfg.metricsPath}";
-                  SNAPRD_SNAPRAID_CONFIG =
+                  SNAPRD_SNAPRAID_CONFIGPATH =
                     lib.mkIf (cfg.snapraidConfig != "") mkSnapraidConfigFile;
                 };
                 serviceConfig = {
