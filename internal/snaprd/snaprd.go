@@ -57,7 +57,6 @@ func New(configFile string) (*Snaprd, error) {
 func (s *Snaprd) cleanup() {
 	log.Info("Running cleanup...")
 	for _, file := range s.LogFiles {
-		log.Info(file)
 		if err := os.Remove(file); err != nil {
 			log.WithError(err).Info("error whilst running cleanup")
 		}
